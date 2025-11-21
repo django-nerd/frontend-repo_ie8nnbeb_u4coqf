@@ -27,7 +27,7 @@ export default function Hero() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <button onClick={() => setOpen(true)} className="h-12 inline-flex items-center px-5 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/20 hover:brightness-110 transition">Browse Products</button>
-              <a href="#faq" className="h-12 inline-flex items-center px-5 rounded-lg bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition">Feedback & FAQ</a>
+              <a href="https://discord.gg/K5BU46kJMY" target="_blank" rel="noopener noreferrer" className="h-12 inline-flex items-center px-5 rounded-lg bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition">Need help?</a>
             </div>
             <p className="mt-4 text-sm text-slate-400">Delivery within minutes to your IGN after purchase.</p>
           </div>

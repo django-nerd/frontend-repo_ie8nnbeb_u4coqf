@@ -68,6 +68,8 @@ export default function ProductCard({ product, onAdd }) {
     setQuantity(Math.max(1, Math.round(desiredUnitsM / (parseUnitsFromName(one.name) || 1))))
   }
 
+  const formattedUnitPrice = Number(product.price).toFixed(Number(product.price) < 1 ? 3 : 2)
+
   return (
     <div className="group relative rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition overflow-hidden">
       <div className="aspect-[4/3] bg-slate-900/30 relative">
@@ -81,7 +83,7 @@ export default function ProductCard({ product, onAdd }) {
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <h3 className="text-white font-semibold text-lg leading-tight">{product.title}</h3>
-          <div className="text-emerald-300 font-bold">${Number(product.price).toFixed(3)}</div>
+          <div className="h-10 inline-flex items-center px-3 rounded-md bg-white/10 border border-white/10 text-emerald-300 font-bold whitespace-nowrap">${formattedUnitPrice}</div>
         </div>
         {product.description && (
           <p className="text-slate-400 text-sm mt-1 line-clamp-2">{product.description}</p>
@@ -127,7 +129,7 @@ export default function ProductCard({ product, onAdd }) {
             {isMoney && (
               <div className="ml-auto flex items-center gap-2">
                 <span className="text-xs text-slate-400">Quick:</span>
-                {[5,10,25].map((m) => (
+                {[5,10,25,50,100].map((m) => (
                   <button
                     type="button"
                     key={m}
