@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Products from './components/Products'
+import FAQ from './components/FAQ'
 import Footer from './components/Footer'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Navbar onCartClick={() => alert('Cart coming soon')} count={cartCount} />
       <Hero />
       <Products onAdd={handleAdd} />
+      <FAQ />
       <Footer />
     </div>
   )

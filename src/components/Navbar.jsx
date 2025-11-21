@@ -22,12 +22,11 @@ export default function Navbar({ onCartClick, count = 0 }) {
 
           <nav className="hidden md:flex items-center gap-8">
             <a href="#products" className="text-slate-300 hover:text-white transition">Products</a>
-            <a href="#how" className="text-slate-300 hover:text-white transition">How it works</a>
-            <a href="#faq" className="text-slate-300 hover:text-white transition">FAQ</a>
+            <a href="#faq" className="text-slate-300 hover:text-white transition">Feedback</a>
           </nav>
 
           <div className="flex items-center gap-3">
-            <button onClick={onCartClick} className="relative inline-flex items-center gap-2 text-white px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 transition">
+            <button onClick={onCartClick} className="h-10 relative inline-flex items-center gap-2 text-white px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 transition">
               <ShoppingCart size={18} />
               <span className="hidden sm:inline">Cart</span>
               <span className="absolute -top-2 -right-2 text-xs bg-emerald-500 text-white rounded-full px-1.5 py-0.5 shadow">{count}</span>
@@ -42,8 +41,7 @@ export default function Navbar({ onCartClick, count = 0 }) {
           <div className="md:hidden pb-4">
             <div className="grid gap-2">
               <a href="#products" className="text-slate-200 py-2">Products</a>
-              <a href="#how" className="text-slate-200 py-2">How it works</a>
-              <a href="#faq" className="text-slate-200 py-2">FAQ</a>
+              <a href="#faq" className="text-slate-200 py-2">Feedback</a>
             </div>
           </div>
         )}

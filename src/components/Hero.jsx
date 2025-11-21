@@ -21,8 +21,8 @@ export default function Hero() {
               Shop spawners, in‑game currency, and powerful kits for your Minecraft Donut SMP. Fast delivery, secure checkout, and premium quality items.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#products" className="px-5 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/20 hover:brightness-110 transition">Browse Products</a>
-              <a href="#how" className="px-5 py-3 rounded-lg bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition">How It Works</a>
+              <a href="#products" className="h-12 inline-flex items-center px-5 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/20 hover:brightness-110 transition">Browse Products</a>
+              <a href="#faq" className="h-12 inline-flex items-center px-5 rounded-lg bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition">Feedback & FAQ</a>
             </div>
             <p className="mt-4 text-sm text-slate-400">Delivery within minutes to your IGN after purchase.</p>
           </div>
