@@ -5,6 +5,14 @@ export default function ProductCard({ product, onAdd }) {
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null)
   const [quantity, setQuantity] = useState(1)
 
+  const parseUnitsFromName = (name) => {
+    if (!name) return null
+    const match = name.match(/(\d+)\s*M/i)
+    return match ? Number(match[1]) : null
+  }
+
+  const isMoney = /money/i.test(`${product?.title || ''} ${product?.sku || ''}`)
+
   const priceForSelection = () => {
     const base = Number(product.price || 0)
     if (!selectedVariant) return base * quantity
@@ -24,6 +32,35 @@ export default function ProductCard({ product, onAdd }) {
       category: product.category,
     }
     onAdd(lineItem)
+  }
+
+  const applyMoneyPreset = (desiredUnitsM) => {
+    if (!product?.variants?.length) return
+    // Prefer an exact variant match (e.g., 10M)
+    let exact = product.variants.find(v => parseUnitsFromName(v.name) === desiredUnitsM)
+    if (exact) {
+      setSelectedVariant(exact)
+      setQuantity(1)
+      return
+    }
+    // Otherwise prefer 5M packs if they exist, else fall back to 1M packs
+    const five = product.variants.find(v => parseUnitsFromName(v.name) === 5)
+    const ten = product.variants.find(v => parseUnitsFromName(v.name) === 10)
+    const one = product.variants.find(v => parseUnitsFromName(v.name) === 1) || product.variants[0]
+
+    if (ten && desiredUnitsM % 10 === 0) {
+      setSelectedVariant(ten)
+      setQuantity(desiredUnitsM / 10)
+      return
+    }
+    if (five && desiredUnitsM % 5 === 0) {
+      setSelectedVariant(five)
+      setQuantity(desiredUnitsM / 5)
+      return
+    }
+    // Fallback to 1M packs
+    setSelectedVariant(one)
+    setQuantity(Math.max(1, Math.round(desiredUnitsM / (parseUnitsFromName(one.name) || 1))))
   }
 
   return (
@@ -69,10 +106,10 @@ export default function ProductCard({ product, onAdd }) {
           </div>
         )}
 
-        {/* Quantity */}
+        {/* Quantity + Money presets */}
         <div className="mt-3">
           <label className="block text-xs text-slate-400 mb-1">Quantity</label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <input
               type="number"
               min={1}
@@ -81,6 +118,23 @@ export default function ProductCard({ product, onAdd }) {
               className="h-10 w-24 bg-slate-800/80 border border-white/10 rounded-md px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             <span className="text-xs text-slate-400">per selection</span>
+
+            {isMoney && (
+              <div className="ml-auto flex items-center gap-2">
+                <span className="text-xs text-slate-400">Quick:</span>
+                {[5,10,25].map((m) => (
+                  <button
+                    type="button"
+                    key={m}
+                    onClick={() => applyMoneyPreset(m)}
+                    className="h-8 px-2 rounded-md text-xs bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 transition"
+                    title={`Set to ${m}M total`}
+                  >
+                    {m}M
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

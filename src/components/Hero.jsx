@@ -1,6 +1,11 @@
 import { Sparkles } from 'lucide-react'
+import { useState } from 'react'
+import Modal from './Modal'
+import Products from './Products'
 
 export default function Hero() {
+  const [open, setOpen] = useState(false)
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(600px_circle_at_10%_20%,rgba(16,185,129,0.15),transparent_40%),radial-gradient(800px_circle_at_90%_30%,rgba(34,211,238,0.12),transparent_40%)]" />
@@ -21,7 +26,7 @@ export default function Hero() {
               Shop spawners, in‑game currency, and powerful kits for your Minecraft Donut SMP. Fast delivery, secure checkout, and premium quality items.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#products" className="h-12 inline-flex items-center px-5 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/20 hover:brightness-110 transition">Browse Products</a>
+              <button onClick={() => setOpen(true)} className="h-12 inline-flex items-center px-5 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/20 hover:brightness-110 transition">Browse Products</button>
               <a href="#faq" className="h-12 inline-flex items-center px-5 rounded-lg bg-white/10 text-white font-semibold border border-white/10 hover:bg-white/15 transition">Feedback & FAQ</a>
             </div>
             <p className="mt-4 text-sm text-slate-400">Delivery within minutes to your IGN after purchase.</p>
@@ -32,6 +37,10 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      <Modal open={open} onClose={() => setOpen(false)} title="All Products">
+        <Products onAdd={() => {}} />
+      </Modal>
     </section>
   )
 }
