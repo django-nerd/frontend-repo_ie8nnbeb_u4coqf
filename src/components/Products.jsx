@@ -11,7 +11,21 @@ export default function Products({ onAdd }) {
         const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
         const res = await fetch(`${baseUrl}/api/products`)
         const data = await res.json()
-        setProducts(data)
+        // Enforce desired order: Skeleton Spawner, Money, Elytra
+        const priority = {
+          'SPAWNER-SKELETON': 0,
+          'MONEY-PACK': 1,
+          'ELYTRA-BASE': 2,
+        }
+        const ordered = [...data].sort((a, b) => {
+          const aKey = (a.sku || a.title || '').toUpperCase()
+          const bKey = (b.sku || b.title || '').toUpperCase()
+          const aP = priority[aKey] ?? priority[a.title?.toUpperCase()] ?? 99
+          const bP = priority[bKey] ?? priority[b.title?.toUpperCase()] ?? 99
+          if (aP !== bP) return aP - bP
+          return (a.title || '').localeCompare(b.title || '')
+        })
+        setProducts(ordered)
       } catch (e) {
         console.error('Failed to load products', e)
       } finally {

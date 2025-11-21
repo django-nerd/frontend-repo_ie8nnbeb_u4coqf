@@ -9,7 +9,7 @@ export default function ProductCard({ product, onAdd }) {
     if (!name) return null
     const match = name.match(/(\d+)\s*M/i)
     return match ? Number(match[1]) : null
-  }
+    }
 
   const isMoney = /money/i.test(`${product?.title || ''} ${product?.sku || ''}`)
 
@@ -134,7 +134,7 @@ export default function ProductCard({ product, onAdd }) {
                     type="button"
                     key={m}
                     onClick={() => applyMoneyPreset(m)}
-                    className="h-8 px-2 rounded-md text-xs bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 transition"
+                    className="h-10 px-3 rounded-md text-xs bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 transition"
                     title={`Set to ${m}M total`}
                   >
                     {m}M

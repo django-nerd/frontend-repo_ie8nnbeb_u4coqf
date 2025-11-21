@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Star } from 'lucide-react'
+import Modal from './Modal'
 
 export default function FAQAndFeedback() {
   const [faqs] = useState([
@@ -13,6 +14,7 @@ export default function FAQAndFeedback() {
   const [message, setMessage] = useState('')
   const [ign, setIgn] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [openTop, setOpenTop] = useState(false)
 
   const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 
@@ -52,6 +54,8 @@ export default function FAQAndFeedback() {
       setSubmitting(false)
     }
   }
+
+  const topFeedback = feedback.filter(f => (f.stars || 0) >= 4)
 
   return (
     <section id="faq" className="py-16">
@@ -94,7 +98,10 @@ export default function FAQAndFeedback() {
                   <input value={message} onChange={e=>setMessage(e.target.value)} className="h-10 w-full bg-slate-800/80 border border-white/10 rounded-md px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Tell us about your experience" />
                 </div>
               </div>
-              <div className="flex justify-end">
+              <div className="flex items-center gap-3 justify-end">
+                <button type="button" onClick={() => setOpenTop(true)} className="h-10 inline-flex items-center gap-2 text-sm px-4 rounded-md bg-white/10 hover:bg-white/15 text-white border border-white/10 transition">
+                  See all Feedbacks!
+                </button>
                 <button disabled={submitting} className="h-10 inline-flex items-center gap-2 text-sm px-4 rounded-md bg-emerald-500/90 hover:bg-emerald-500 disabled:opacity-60 text-white transition">
                   {submitting ? 'Submitting...' : 'Submit Feedback'}
                 </button>
@@ -119,6 +126,24 @@ export default function FAQAndFeedback() {
           </div>
         </div>
       </div>
+
+      <Modal open={openTop} onClose={() => setOpenTop(false)} title="See all Feedbacks!">
+        <div className="space-y-3 max-h-[60vh] overflow-auto pr-1">
+          {topFeedback.length === 0 ? (
+            <div className="text-slate-300">No 4★+ feedback yet.</div>
+          ) : topFeedback.map(f => (
+            <div key={f.id} className="rounded-lg border border-white/10 bg-white/5 p-4">
+              <div className="flex items-center gap-2 text-amber-300">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} size={16} fill={i < (f.stars || 0) ? 'currentColor' : 'none'} className={i < (f.stars || 0) ? '' : 'text-slate-500'} />
+                ))}
+              </div>
+              <p className="text-slate-200 mt-2 text-sm">{f.message || 'No message provided.'}</p>
+              {f.ign && <div className="text-xs text-slate-400 mt-1">— {f.ign}</div>}
+            </div>
+          ))}
+        </div>
+      </Modal>
     </section>
   )
 }
