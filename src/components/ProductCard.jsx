@@ -81,8 +81,8 @@ export default function ProductCard({ product, onAdd }) {
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-t from-slate-900/60 to-transparent" />
       </div>
       <div className="p-4">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-white font-semibold text-lg leading-tight">{product.title}</h3>
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-white font-semibold text-lg leading-none h-10 flex items-center">{product.title}</h3>
           <div className="h-10 inline-flex items-center px-3 rounded-md bg-white/10 border border-white/10 text-emerald-300 font-bold whitespace-nowrap">${formattedUnitPrice}</div>
         </div>
         {product.description && (

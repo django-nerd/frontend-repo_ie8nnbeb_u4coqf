@@ -5,7 +5,7 @@ import Modal from './Modal'
 export default function FAQAndFeedback() {
   const [faqs] = useState([
     { q: 'How fast is delivery?', a: 'Most orders are delivered within minutes to your IGN.' },
-    { q: 'Which payments are supported?', a: 'We can integrate Stripe, PayPal, or Tebex based on your preference.' },
+    { q: 'What payment methods are supported?', a: 'We accept a variety of different payment methods like Paypal, Card, Crypto and alot more! Head to Checkout in order to see for yourself!' },
     { q: 'Is this affiliated with Mojang/Microsoft?', a: 'No, ZenSupply is not affiliated with Mojang or Microsoft.' },
   ])
 
@@ -15,6 +15,7 @@ export default function FAQAndFeedback() {
   const [ign, setIgn] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [openTop, setOpenTop] = useState(false)
+  const [viewSize, setViewSize] = useState('small') // small | mid | large
 
   const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 
@@ -56,6 +57,10 @@ export default function FAQAndFeedback() {
   }
 
   const topFeedback = feedback.filter(f => (f.stars || 0) >= 4)
+
+  const gridClass = viewSize === 'small' ? 'grid-cols-1' : viewSize === 'mid' ? 'grid-cols-2' : 'grid-cols-3'
+  const cardPadding = viewSize === 'large' ? 'p-5' : viewSize === 'mid' ? 'p-3' : 'p-4'
+  const textSize = viewSize === 'large' ? 'text-base' : viewSize === 'mid' ? 'text-xs' : 'text-sm'
 
   return (
     <section id="faq" className="py-16">
@@ -127,19 +132,32 @@ export default function FAQAndFeedback() {
         </div>
       </div>
 
-      <Modal open={openTop} onClose={() => setOpenTop(false)} title="See all Feedbacks!">
-        <div className="space-y-3 max-h-[60vh] overflow-auto pr-1">
+      <Modal open={openTop} onClose={() => setOpenTop(false)} title="Recent Feedback!">
+        <div className="mb-3 flex items-center gap-2">
+          <span className="text-xs text-slate-400">View:</span>
+          {['small','mid','large'].map(size => (
+            <button
+              key={size}
+              type="button"
+              onClick={() => setViewSize(size)}
+              className={`h-8 px-3 rounded-md border text-xs transition ${viewSize === size ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300' : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10'}`}
+            >
+              {size === 'small' ? 'Small' : size === 'mid' ? 'Mid' : 'Large'}
+            </button>
+          ))}
+        </div>
+        <div className={`grid ${gridClass} gap-3 max-h-[60vh] overflow-auto pr-1`}>
           {topFeedback.length === 0 ? (
             <div className="text-slate-300">No 4★+ feedback yet.</div>
           ) : topFeedback.map(f => (
-            <div key={f.id} className="rounded-lg border border-white/10 bg-white/5 p-4">
-              <div className="flex items-center gap-2 text-amber-300">
+            <div key={f.id} className={`rounded-lg border border-white/10 bg-white/5 ${cardPadding}`}>
+              <div className={`flex items-center gap-2 text-amber-300 ${textSize}`}>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} size={16} fill={i < (f.stars || 0) ? 'currentColor' : 'none'} className={i < (f.stars || 0) ? '' : 'text-slate-500'} />
                 ))}
               </div>
-              <p className="text-slate-200 mt-2 text-sm">{f.message || 'No message provided.'}</p>
-              {f.ign && <div className="text-xs text-slate-400 mt-1">— {f.ign}</div>}
+              <p className={`text-slate-200 mt-2 ${textSize}`}>{f.message || 'No message provided.'}</p>
+              {f.ign && <div className={`text-slate-400 mt-1 ${viewSize === 'large' ? 'text-sm' : 'text-xs'}`}>— {f.ign}</div>}
             </div>
           ))}
         </div>
