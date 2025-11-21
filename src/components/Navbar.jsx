@@ -1,7 +1,7 @@
-import { ShoppingCart, Menu, Swords, Shield } from 'lucide-react'
+import { ShoppingCart, Menu, Swords } from 'lucide-react'
 import { useState } from 'react'
 
-export default function Navbar({ onCartClick }) {
+export default function Navbar({ onCartClick, count = 0 }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -30,7 +30,7 @@ export default function Navbar({ onCartClick }) {
             <button onClick={onCartClick} className="relative inline-flex items-center gap-2 text-white px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 transition">
               <ShoppingCart size={18} />
               <span className="hidden sm:inline">Cart</span>
-              <span className="absolute -top-2 -right-2 text-xs bg-emerald-500 text-white rounded-full px-1.5 py-0.5 shadow">0</span>
+              <span className="absolute -top-2 -right-2 text-xs bg-emerald-500 text-white rounded-full px-1.5 py-0.5 shadow">{count}</span>
             </button>
             <button className="md:hidden text-white/80" onClick={() => setOpen(v => !v)}>
               <Menu />
