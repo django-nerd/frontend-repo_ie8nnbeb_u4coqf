@@ -35,7 +35,12 @@ export default function ProductCard({ product, onAdd }) {
   }
 
   const applyMoneyPreset = (desiredUnitsM) => {
-    if (!product?.variants?.length) return
+    // If the Money product has no variants, quantity represents millions directly
+    if (!product?.variants || product.variants.length === 0) {
+      setSelectedVariant(null)
+      setQuantity(Math.max(1, Number(desiredUnitsM)))
+      return
+    }
     // Prefer an exact variant match (e.g., 10M)
     let exact = product.variants.find(v => parseUnitsFromName(v.name) === desiredUnitsM)
     if (exact) {
