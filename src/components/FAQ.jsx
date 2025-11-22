@@ -5,7 +5,7 @@ import Modal from './Modal'
 export default function FAQAndFeedback() {
   const [faqs] = useState([
     { q: 'How fast is delivery?', a: 'Most orders are delivered within minutes to your IGN.' },
-    { q: 'What payment methods are supported?', a: 'We accept a variety of different payment methods like Paypal, Card, Crypto and alot more! Head to Checkout in order to see for yourself!' },
+    { q: 'What payment methods are supported?', a: 'We accept a variety of different payment methods like Paypal, Card, Crypto and a lot more! Head to Checkout in order to see for yourself!' },
     { q: 'Is this affiliated with Mojang/Microsoft?', a: 'No, ZenSupply is not affiliated with Mojang or Microsoft.' },
   ])
 
@@ -15,7 +15,10 @@ export default function FAQAndFeedback() {
   const [ign, setIgn] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [openTop, setOpenTop] = useState(false)
-  const [viewSize, setViewSize] = useState('small') // small | mid | large
+  const [viewSize, setViewSize] = useState(() => {
+    if (typeof window === 'undefined') return 'mid'
+    return localStorage.getItem('feedbackViewSize') || 'mid'
+  }) // small | mid | large
 
   const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 
@@ -31,6 +34,14 @@ export default function FAQAndFeedback() {
     }
     load()
   }, [])
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('feedbackViewSize', viewSize)
+      }
+    } catch {}
+  }, [viewSize])
 
   const submit = async (e) => {
     e.preventDefault()

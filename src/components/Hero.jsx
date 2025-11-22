@@ -22,7 +22,8 @@ export default function Hero() {
                 ZenSupply
               </span>
             </h1>
-            <p className="mt-6 text-lg text-slate-300 max-w-xl">
+            <p className="mt-3 text-sm text-emerald-200/90">Skeleton spawners, Money and more. Fast Checkout, rapid delivery and 24/7 Support.</p>
+            <p className="mt-4 text-lg text-slate-300 max-w-xl">
               Shop spawners, in‑game currency, and powerful kits for your Minecraft Donut SMP. Fast delivery, secure checkout, and premium quality items.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
