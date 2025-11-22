@@ -12,19 +12,60 @@ export default function Products({ onAdd }) {
         const res = await fetch(`${baseUrl}/api/products`)
         const data = await res.json()
 
-        // Inject images for the three featured products (fallback if backend doesn't provide)
+        // Helpers
+        const cleanText = (txt = '') => txt.replace(/\(27x\)\s*Behind\s*Skeleton\s*Shulker!?/gi, '').trim()
+
+        // Stable image fallbacks from the Minecraft Wiki/Wikimedia (hotlink-friendly)
+        const FALLBACKS = {
+          SPAWNER: 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/40/Spawner_JE3_BE2.png',
+          MONEY: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Green_US_dollar_icon.svg/512px-Green_US_dollar_icon.svg.png',
+          ELYTRA: 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/0c/Elytra_JE2_BE2.png',
+        }
+
+        // Inject images and copy tweaks for featured products
         const withImages = data.map(p => {
-          const key = (p.sku || p.title || '').toUpperCase()
-          if (key.includes('SPAWNER') || key.includes('SPAWNER-SKELETON') || /skeleton/i.test(p.title || '')) {
-            return { ...p, image_url: p.image_url || 'https://gamepedia.cursecdn.com/minecraft_gamepedia/4/40/Spawner_JE3.png' }
+          const title = (p.title || '').trim()
+          const sku = (p.sku || '').toUpperCase()
+          const key = `${sku} ${title}`.toUpperCase()
+
+          // Base cleaned fields
+          let next = {
+            ...p,
+            title: cleanText(title),
+            description: cleanText(p.description || ''),
           }
-          if (key.includes('MONEY') || key.includes('MONEY-PACK')) {
-            return { ...p, image_url: p.image_url || 'https://static.wixstatic.com/media/79eca2_232cfc6d690e4e40a6360d8bdd39495f~mv2.gif' }
+
+          // Skeleton Spawner
+          if (key.includes('SPAWNER') || /skeleton\s*spawner/i.test(title)) {
+            next = {
+              ...next,
+              image_url: p.image_url || FALLBACKS.SPAWNER,
+              description: 'Cheap Skeleton Spawners, non duped!',
+            }
+            return next
           }
-          if (key.includes('ELYTRA') || /elytra/i.test(p.title || '')) {
-            return { ...p, image_url: p.image_url || 'https://cdn.apexminecrafthosting.com/img/uploads/2022/03/28151238/elytra.png' }
+
+          // Money Pack
+          if (key.includes('MONEY')) {
+            next = {
+              ...next,
+              image_url: p.image_url || FALLBACKS.MONEY,
+              description: 'In-game Money for just 0.03$ per Million.',
+            }
+            return next
           }
-          return p
+
+          // Elytra
+          if (key.includes('ELYTRA')) {
+            next = {
+              ...next,
+              image_url: p.image_url || FALLBACKS.ELYTRA,
+              description: 'Elytra for just 12$',
+            }
+            return next
+          }
+
+          return next
         })
 
         // Enforce desired order: Skeleton Spawner, Money, Elytra
