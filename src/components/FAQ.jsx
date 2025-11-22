@@ -123,22 +123,6 @@ export default function FAQAndFeedback() {
                 </button>
               </div>
             </form>
-
-            <div className="mt-6 space-y-3">
-              {feedback.length === 0 ? (
-                <div className="text-slate-400 text-sm">No feedback yet — be the first!</div>
-              ) : feedback.map(f => (
-                <div key={f.id} className="rounded-lg border border-white/10 bg-white/5 p-4">
-                  <div className="flex items-center gap-2 text-amber-300">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} size={16} fill={i < (f.stars || 0) ? 'currentColor' : 'none'} className={i < (f.stars || 0) ? '' : 'text-slate-500'} />
-                    ))}
-                  </div>
-                  <p className="text-slate-200 mt-2 text-sm">{f.message || 'No message provided.'}</p>
-                  {f.ign && <div className="text-xs text-slate-400 mt-1">— {f.ign}</div>}
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
