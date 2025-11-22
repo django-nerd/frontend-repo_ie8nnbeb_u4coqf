@@ -11,13 +11,29 @@ export default function Products({ onAdd }) {
         const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
         const res = await fetch(`${baseUrl}/api/products`)
         const data = await res.json()
+
+        // Inject images for the three featured products (fallback if backend doesn't provide)
+        const withImages = data.map(p => {
+          const key = (p.sku || p.title || '').toUpperCase()
+          if (key.includes('SPAWNER') || key.includes('SPAWNER-SKELETON') || /skeleton/i.test(p.title || '')) {
+            return { ...p, image_url: p.image_url || 'https://gamepedia.cursecdn.com/minecraft_gamepedia/4/40/Spawner_JE3.png' }
+          }
+          if (key.includes('MONEY') || key.includes('MONEY-PACK')) {
+            return { ...p, image_url: p.image_url || 'https://static.wixstatic.com/media/79eca2_232cfc6d690e4e40a6360d8bdd39495f~mv2.gif' }
+          }
+          if (key.includes('ELYTRA') || /elytra/i.test(p.title || '')) {
+            return { ...p, image_url: p.image_url || 'https://cdn.apexminecrafthosting.com/img/uploads/2022/03/28151238/elytra.png' }
+          }
+          return p
+        })
+
         // Enforce desired order: Skeleton Spawner, Money, Elytra
         const priority = {
           'SPAWNER-SKELETON': 0,
           'MONEY-PACK': 1,
           'ELYTRA-BASE': 2,
         }
-        const ordered = [...data].sort((a, b) => {
+        const ordered = [...withImages].sort((a, b) => {
           const aKey = (a.sku || a.title || '').toUpperCase()
           const bKey = (b.sku || b.title || '').toUpperCase()
           const aP = priority[aKey] ?? priority[a.title?.toUpperCase()] ?? 99
